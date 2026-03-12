@@ -1,0 +1,84 @@
+import java.util.*;
+
+class Solution {
+    
+    static int[] moveX = {0, 1, 0, -1};
+    static int[] moveY = {-1, 0, 1, 0};
+    static int maxX = 0;
+    static int maxY = 0;    
+            
+    public int solution(String[] maps) {
+        int answer = 0;
+        
+        // 문자열 배열을 문자 2차원 배열로 변환
+        char[][] charMaps = new char[maps.length][maps[0].length()];
+        for(int i = 0; i < maps.length; i++){
+            charMaps[i] = maps[i].toCharArray();
+        }
+        
+        maxX = charMaps[0].length;
+        maxY = charMaps.length;
+        
+        // 시작, 레버, 출구
+        int[] start = new int[2];
+        int[] lebber = new int[2];
+        int[] exit = new int[2];
+        
+        for(int i = 0; i < charMaps.length; i++){
+            for(int j = 0; j < charMaps[i].length; j++){
+                if(charMaps[i][j] == 'S'){
+                    start[0] = i;
+                    start[1] = j;
+                }
+                else if(charMaps[i][j] == 'L'){
+                    lebber[0] = i;
+                    lebber[1] = j;
+                }
+                else if(charMaps[i][j] == 'E'){
+                    exit[0] = i;
+                    exit[1] = j;
+                }
+            }
+        }
+        
+        int startToLebber = bfs(charMaps, start, lebber);
+        int lebberToExit = bfs(charMaps, lebber, exit);
+        
+        if(startToLebber == -1 || lebberToExit == -1){
+            return -1;
+        } 
+        
+        return startToLebber + lebberToExit;
+    }
+    
+    private int bfs(char[][] maps, int[] point, int[] target){
+        Deque<int[]> q = new ArrayDeque<>();
+        int[][] visited = new int[maxY][maxX];
+        
+        q.add(point);
+        while(!q.isEmpty()){
+            int[] now = q.poll();
+            int nowX = now[1];
+            int nowY = now[0];
+            
+            if(nowY == target[0] && nowX == target[1]){
+                return visited[nowY][nowX];
+            }
+            
+            for(int i = 0; i < 4; i++){
+                int nextX = nowX + moveX[i];
+                int nextY = nowY + moveY[i];
+                
+                if((nextX < maxX) && (nextY < maxY) && (nextX >= 0) && (nextY >= 0)){
+                    if(visited[nextY][nextX] == 0 && maps[nextY][nextX] != 'X'){
+                        visited[nextY][nextX] = visited[nowY][nowX] + 1;
+                        q.offer(new int[]{nextY, nextX});
+                    }
+                }
+            }
+        }
+        
+        return -1;
+    }
+    
+}
