@@ -19,7 +19,7 @@ class Solution {
         maxX = charMaps[0].length;
         maxY = charMaps.length;
         
-        // 시작, 레버, 출구
+        // 시작, 레버, 출구..
         int[] start = new int[2];
         int[] lebber = new int[2];
         int[] exit = new int[2];
