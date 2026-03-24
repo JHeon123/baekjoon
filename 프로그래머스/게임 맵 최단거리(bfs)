@@ -1,0 +1,49 @@
+import java.util.*;
+
+class Solution {
+    
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {-1, 0, 1, 0};
+    static int[][] len;
+    static int n, m;
+    
+    public int solution(int[][] maps) {
+        n = maps[0].length;
+        m = maps.length;
+        len = new int[m][n];
+        
+        bfs(maps);
+        
+        if(len[m - 1][n - 1] != 0){
+            return len[m - 1][n - 1] + 1;
+        }
+        else{
+            return -1;
+        }
+    }
+    
+    public void bfs(int[][]maps){
+        Deque<int[]> q = new ArrayDeque<>();
+        
+        q.offer(new int[]{0, 0});
+        
+        while(!q.isEmpty()){
+            int[] now = q.poll();
+            int nowX = now[0];
+            int nowY = now[1];
+            
+            for(int i = 0; i < 4; i++){
+                int nextX = nowX + dx[i];
+                int nextY = nowY + dy[i];
+                
+                if(nextX >= 0 && nextX < n && nextY >= 0 && nextY < m){
+                    if(maps[nextY][nextX] == 1 && len[nextY][nextX] == 0){
+                        q.offer(new int[]{nextX, nextY});    
+                        len[nextY][nextX] = len[nowY][nowX] + 1;
+                    }
+                }
+            }
+        }
+        
+    }
+}
